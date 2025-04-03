@@ -153,7 +153,10 @@ namespace WindowsShadeSimple
             if (Keys.Escape == keyData)
             {
                 Environment.Exit(0);
-                return true;
+            }
+            else if (Keys.Delete == keyData)
+            {
+                this.Close();
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
