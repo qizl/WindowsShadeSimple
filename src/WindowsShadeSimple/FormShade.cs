@@ -2,42 +2,37 @@ using System.Runtime.InteropServices;
 
 namespace WindowsShadeSimple
 {
-    public partial class Form1 : Form
+    public partial class FormShade : Form
     {
-        public Form1()
+        public bool Sizeable = true;
+
+        private const int CS_DROPSHADOW = 0x00020000;
+        private const int WM_NCPAINT = 0x0085;
+        private const int HTLEFT = 10;
+        private const int HTRIGHT = 11;
+        private const int HTTOP = 12;
+        private const int HTTOPLEFT = 13;
+        private const int HTTOPRIGHT = 14;
+        private const int HTBOTTOM = 15;
+        private const int HTBOTTOMLEFT = 0x10;
+        private const int HTBOTTOMRIGHT = 17;
+
+        private bool m_aeroEnabled = false;
+        private int _x;
+        private int _y;
+
+        public struct MARGINS
+        {
+            public int leftWidth;
+            public int rightWidth;
+            public int topHeight;
+            public int bottomHeight;
+        }
+
+        public FormShade()
         {
             InitializeComponent();
         }
-
-        [DllImport("user32.dll")]
-        public static extern bool ReleaseCapture();
-        [DllImport("user32.dll")]
-        public static extern bool SendMessage(IntPtr hwnd, int wMsg, int wParam, int lParam);
-
-        public const int WM_SYSCOMMAND = 0x0112;
-
-        // ¥∞ÃÂ“∆∂Ø
-        public const int SC_MOVE = 0xF010;
-        public const int HTCAPTION = 0x0002;
-        private void Form1_MouseDown(object sender, MouseEventArgs e)
-        {
-            ReleaseCapture();
-            SendMessage(this.Handle, WM_SYSCOMMAND, SC_MOVE + HTCAPTION, 0);
-        }
-
-
-        public bool Sizeable = true;
-
-        [DllImport("Gdi32.dll", EntryPoint = "CreateRoundRectRgn")]
-        private static extern IntPtr CreateRoundRectRgn
-        (
-            int nLeftRect,
-            int nTopRect,
-            int nRightRect,
-            int nBottomRect,
-            int nWidthEllipse,
-            int nHeightEllipse
-        );
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmExtendFrameIntoClientArea(IntPtr hWnd, ref MARGINS pMarInset);
@@ -47,18 +42,6 @@ namespace WindowsShadeSimple
 
         [DllImport("dwmapi.dll")]
         public static extern int DwmIsCompositionEnabled(ref int pfEnabled);
-
-        private bool m_aeroEnabled = false;
-        private const int CS_DROPSHADOW = 0x00020000;
-        private const int WM_NCPAINT = 0x0085;
-
-        public struct MARGINS
-        {
-            public int leftWidth;
-            public int rightWidth;
-            public int topHeight;
-            public int bottomHeight;
-        }
 
         protected override CreateParams CreateParams
         {
@@ -84,15 +67,6 @@ namespace WindowsShadeSimple
             }
             return false;
         }
-
-        const int HTLEFT = 10;
-        const int HTRIGHT = 11;
-        const int HTTOP = 12;
-        const int HTTOPLEFT = 13;
-        const int HTTOPRIGHT = 14;
-        const int HTBOTTOM = 15;
-        const int HTBOTTOMLEFT = 0x10;
-        const int HTBOTTOMRIGHT = 17;
 
         protected override void WndProc(ref Message m)
         {
@@ -178,11 +152,27 @@ namespace WindowsShadeSimple
         {
             if (Keys.Escape == keyData)
             {
-                this.Close();
+                Environment.Exit(0);
                 return true;
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private void FormShade_MouseDown(object sender, MouseEventArgs e)
+        {
+            this._x = e.X;
+            this._y = e.Y;
+        }
+        private void FormShade_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+                this.Location = new Point(this.Location.X + e.X - this._x, this.Location.Y + e.Y - this._y);
+        }
+
+        private void FormShade_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            new FormShade().Show();
         }
     }
 }

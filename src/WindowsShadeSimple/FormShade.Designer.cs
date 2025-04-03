@@ -1,6 +1,6 @@
 ﻿namespace WindowsShadeSimple
 {
-    partial class Form1
+    partial class FormShade
     {
         /// <summary>
         ///  Required designer variable.
@@ -30,7 +30,7 @@
         {
             SuspendLayout();
             // 
-            // Form1
+            // FormShade
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -38,13 +38,13 @@
             ClientSize = new Size(800, 450);
             Cursor = Cursors.SizeAll;
             FormBorderStyle = FormBorderStyle.None;
-            MaximizeBox = false;
-            MinimizeBox = false;
-            Name = "Form1";
+            Name = "FormShade";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "WindowsShadeSimple";
             TopMost = true;
-            MouseDown += Form1_MouseDown;
+            MouseDoubleClick += FormShade_MouseDoubleClick;
+            MouseDown += FormShade_MouseDown;
+            MouseMove += FormShade_MouseMove;
             ResumeLayout(false);
         }
 
