@@ -41,7 +41,8 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "Form1";
-            Text = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "WindowsShadeSimple";
             TopMost = true;
             MouseDown += Form1_MouseDown;
             ResumeLayout(false);
